@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark"> <!-- Inicia no modo escuro por padrão -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Patch DMPES - A Experiência Definitiva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f4f4f5; --text-light: #18181b; --text-secondary-light: #52525b; --accent-light: #007AFF; --card-light: #ffffff; --border-light: #e4e4e7;
+      --bg-dark: #0a0a0a; --text-dark: #e5e5e5; --text-secondary-dark: #a1a1aa; --accent-dark: #FACC15; --accent-rgb-dark: 250, 204, 21; --card-dark: #161616; --border-dark: #2a2a2a;
+    }
+    html.light { color-scheme: light; }
+    html.dark { color-scheme: dark; }
+    body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: var(--text-dark); transition: background-color 0.3s ease, color 0.3s ease; opacity: 0; }
+    html.light body { background-color: var(--bg-light); color: var(--text-light); }
+    body.loaded { opacity: 1; transition: opacity 1s ease; }
+    .font-bebas { font-family: 'Bebas Neue', cursive; }
+    
+    #preloader { position: fixed; inset: 0; background-color: var(--bg-dark); z-index: 100; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease-out 0.5s, visibility 0.5s ease-out 0.5s; }
+    html.light #preloader { background-color: var(--bg-light); }
+    .spinner { width: 50px; height: 50px; border: 4px solid var(--border-dark); border-top-color: var(--accent-dark); border-radius: 50%; animation: spin 1s linear infinite; }
+    html.light .spinner { border-color: var(--border-light); border-top-color: var(--accent-light); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hero-bg { background-image: url('https://images.unsplash.com/photo-1511886921325-09229b9b1789?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center 30%; }
+    .hero-overlay { background: linear-gradient(to top, var(--bg-dark) 5%, rgba(10, 10, 10, 0.8) 50%, rgba(10, 10, 10, 0.5) 100%); }
+    html.light .hero-overlay { background: linear-gradient(to top, var(--bg-light) 5%, rgba(244, 244, 245, 0.7) 50%, rgba(244, 244, 245, 0.4) 100%); }
+    
+    .hero-player { filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6)); height: 85vh; max-height: 800px; }
+    .hero-main-title { color: white; }
+    html.light .hero-main-title { color: var(--text-light); } 
+
+    .fade-in-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+    .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+    .link-card { background-color: var(--card-dark); border: 1px solid var(--border-dark); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+    html.light .link-card { background-color: var(--card-light); border-color: var(--border-light); }
+    .link-card:hover { transform: translateY(-5px); border-color: var(--accent-dark); box-shadow: 0 10px 25px -5px rgba(var(--accent-rgb-dark), 0.1), 0 8px 10px -6px rgba(var(--accent-rgb-dark), 0.1); }
+    html.light .link-card:hover { border-color: var(--accent-light); box-shadow: 0 10px 25px -5px rgba(0, 122, 255, 0.1), 0 8px 10px -6px rgba(0, 122, 255, 0.1); }
+    .link-card h3 { color: var(--text-dark); }
+    html.light .link-card h3 { color: var(--text-light); }
+    .link-card p { color: var(--text-secondary-dark); }
+    html.light .link-card p { color: var(--text-secondary-light); }
+
+    .version-card { background-color: var(--card-dark); border: 1px solid var(--border-dark); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    html.light .version-card { background-color: var(--card-light); border-color: var(--border-light); }
+    .version-card:hover { transform: translateY(-5px); }
+    
+    .vip-card { position: relative; border-color: transparent; background-clip: padding-box; }
+    .vip-card::before { content: ''; position: absolute; inset: 0; z-index: -1; margin: -1px; border-radius: inherit; background: linear-gradient(145deg, #FFD700, #FACC15, #E6A100); }
+    .vip-card:hover { box-shadow: 0 10px 30px -5px rgba(var(--accent-rgb-dark), 0.2); }
+    .vip-card h3 { color: #1a1a1a; }
+    
+    .feature-list li { display: flex; align-items: flex-start; margin-bottom: 0.75rem; color: var(--text-dark); }
+    html.light .feature-list li { color: var(--text-light); }
+    .feature-list svg { flex-shrink: 0; width: 1.25rem; height: 1.25rem; margin-right: 0.75rem; }
+    .check-icon { color: #22C55E; }
+    .vip-check-icon { color: #FACC15; }
+    html.light .vip-check-icon { color: #ca8a04; }
+
+    .glow-text { color: var(--accent-dark); text-shadow: 0 0 8px rgba(var(--accent-rgb-dark), 0.5), 0 0 20px rgba(var(--accent-rgb-dark), 0.3); }
+    html.light .glow-text { color: var(--accent-light); text-shadow: none; }
+
+    .showcase-image { transition: transform 0.4s ease, filter 0.4s ease; }
+    .showcase-image:hover { transform: scale(1.05); filter: brightness(1.1); }
+  </style>
+</head>
+<body>
+
+  <div id="preloader"><div class="spinner"></div></div>
+
+  <header class="fixed top-0 left-0 right-0 z-50 p-4">
+    <div class="container mx-auto flex justify-end">
+      <button id="theme-toggle" class="bg-black/20 dark:bg-white/10 backdrop-blur-sm p-2 rounded-full text-white dark:text-yellow-300 hover:scale-110 transition-transform">
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section Reimaginada -->
+    <section id="hero" class="hero-bg relative min-h-screen flex flex-col items-center justify-center text-center p-4 overflow-hidden">
+        <div class="hero-overlay absolute inset-0"></div>
+        
+        <!-- Jogador da Esquerda -->
+        <div class="hidden md:block absolute bottom-0 left-0 lg:left-[5vw] opacity-0" id="hero-player-left">
+            <img src="jogador-1.png" alt="Jogador de futebol" class="hero-player">
+        </div>
+
+        <!-- Conteúdo Central -->
+        <div class="relative z-10 flex flex-col items-center h-full pt-20 pb-10">
+            <div class="flex-grow flex flex-col items-center justify-center fade-in-up">
+                <img id="hero-logo" src="dmpes-logo.png" alt="Logo do DMPES Patch" class="h-20 mb-4 opacity-0">
+                <h1 class="font-bebas text-6xl md:text-8xl lg:text-9xl tracking-wider hero-main-title drop-shadow-2xl">DMPES PATCH</h1>
+                <p class="mt-2 text-lg md:text-xl text-gray-200 dark:text-gray-200 font-bebas tracking-widest drop-shadow-lg">
+                    PORTAL OFICIAL
+                </p>
+            </div>
+            <a href="#versoes" class="mt-auto flex flex-col items-center text-gray-300 hover:text-white transition-colors animate-bounce">
+                <span class="font-bebas tracking-widest text-sm">Role para Explorar</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+            </a>
+        </div>
+        
+        <!-- Jogador da Direita -->
+        <div class="hidden md:block absolute bottom-0 right-0 lg:right-[5vw] opacity-0" id="hero-player-right">
+            <img src="jogador-2.png" alt="Jogador de futebol" class="hero-player transform scale-x-[-1]">
+        </div>
+    </section>
+    
+    <!-- O resto do seu main content aqui, como as seções de comunidade, showcase, versões, etc. -->
+    <!-- Colei abaixo para garantir -->
+    <section class="py-16 md:py-24">
+      <div class="container mx-auto px-4">
+        <h3 class="font-bebas text-center text-3xl tracking-wide text-gray-400 dark:text-[var(--text-secondary-dark)] mb-8 fade-in-up">Faça Parte da Nossa Comunidade</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <a href="https://discord.com/invite/Xw6NBVVkPa" target="_blank" class="link-card p-6 rounded-lg flex items-center space-x-5 fade-in-up" style="transition-delay: 100ms;">
+                <div class="flex-shrink-0 bg-[#5865F2] p-3 rounded-full shadow-lg shadow-indigo-500/30"><svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4464.8254-.618 1.2221a18.0957 18.0957 0 00-5.4852 0c-.1716-.3967-.407-.8468-.618-1.2221a.0741.0741 0 00-.0785-.0371a19.8663 19.8663 0 00-4.8851 1.5152.069.069 0 00-.0321.0276C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0426 2.4228 5.9929 3.0294a.0776.0776 0 00.0842-.0276c.4616-.6304.8781-1.2988 1.229-2.0011a.0741.0741 0 00-.041-.1054a12.3879 12.3879 0 01-1.8942-.9054a.0741.0741 0 01.0076-.1277c.1258-.0943.2517-.1962.3718-.2981a.0741.0741 0 01.0881-.0077c3.4682 2.0433 7.1818 2.0433 10.6499 0a.0741.0741 0 01.0881.0077c.1201.1019.246.2038.3718.2981a.0741.0741 0 01.0076.1277a12.2962 12.2962 0 01-1.8942.9054a.0741.0741 0 00-.041.1054c.3509.7023.7674 1.3707 1.229 2.0011a.0776.0776 0 00.0842.0276c1.9503-.6067 3.9401-1.5219 5.9929-3.0294a.0824.0824 0 00.0312-.0561c.5004-5.177-.8382-9.6739-3.5485-13.6604a.069.069 0 00-.0321-.0276zM9.9982 14.7426c-1.3923 0-2.522-1.2584-2.522-2.8092s1.1297-2.8092 2.522-2.8092c1.3923 0 2.5219 1.2584 2.5219 2.8092s-1.1296 2.8092-2.5219 2.8092zm4.7339 0c-1.3923 0-2.522-1.2584-2.522-2.8092s1.1297-2.8092 2.522-2.8092c1.3923 0 2.5219 1.2584 2.5219 2.8092s-1.1296 2.8092-2.5219 2.8092z"/></svg></div>
+                <div class="text-left"><h3 class="font-bold text-lg">Comunidade no Discord</h3><p>Junte-se para novidades e suporte!</p></div>
+            </a>
+            <a href="https://www.youtube.com/@danielmodspes17" target="_blank" class="link-card p-6 rounded-lg flex items-center space-x-5 fade-in-up" style="transition-delay: 200ms;">
+                <div class="flex-shrink-0 bg-[#FF0000] p-3 rounded-full shadow-lg shadow-red-500/30"><svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.267,4,12,4,12,4S5.733,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.733,2,12,2,12s0,4.267,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.733,20,12,20,12,20s6.267,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.267,22,12,22,12S22,7.733,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z"/></svg></div>
+                <div class="text-left"><h3 class="font-bold text-lg">Canal no YouTube</h3><p>Veja gameplays e tutoriais.</p></div>
+            </a>
+            <a href="https://www.instagram.com/dmpes_" target="_blank" class="link-card p-6 rounded-lg flex items-center space-x-5 fade-in-up" style="transition-delay: 300ms;">
+                <div class="flex-shrink-0 bg-gradient-to-br from-yellow-400 via-red-500 to-purple-600 p-3 rounded-full shadow-lg shadow-pink-500/30"><svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.268.194-6.771 2.693-6.965 6.965-.058 1.281-.072 1.689-.072 4.948s.014 3.667.072 4.947c.194 4.272 2.697 6.771 6.965 6.965 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c4.268-.194 6.771-2.693 6.965-6.965.058-1.281.072-1.689.072-4.947s-.014-3.667-.072-4.947c-.194-4.272-2.697-6.771-6.965-6.965-1.28-.058-1.688-.072-4.947-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+                <div class="text-left"><h3 class="font-bold text-lg">Siga no Instagram</h3><p>Acompanhe os bastidores.</p></div>
+            </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-black/20 dark:bg-black/10">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="font-bebas text-4xl md:text-5xl tracking-wide glow-text fade-in-up">VEJA O VIP EM AÇÃO</h2>
+            <p class="mt-2 text-lg text-gray-400 dark:text-[var(--text-secondary-dark)] max-w-2xl mx-auto fade-in-up" style="transition-delay: 100ms;">Screenshots de algumas das melhorias exclusivas para membros VIP.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                <div class="aspect-video rounded-lg overflow-hidden shadow-lg fade-in-up" style="transition-delay: 200ms;"><img src="previa-vip-1.jpg" alt="Novo Menu Exclusivo" class="w-full h-full object-cover showcase-image"></div>
+                <div class="aspect-video rounded-lg overflow-hidden shadow-lg fade-in-up" style="transition-delay: 300ms;"><img src="previa-vip-2.jpg" alt="Face Realista Exclusiva" class="w-full h-full object-cover showcase-image"></div>
+                <div class="aspect-video rounded-lg overflow-hidden shadow-lg fade-in-up" style="transition-delay: 400ms;"><img src="previa-vip-3.jpg" alt="Placar Exclusivo" class="w-full h-full object-cover showcase-image"></div>
+                <div class="aspect-video rounded-lg overflow-hidden shadow-lg fade-in-up" style="transition-delay: 500ms;"><img src="previa-vip-4.jpg" alt="Estádio Exclusivo" class="w-full h-full object-cover showcase-image"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="versoes" class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
+                <div class="version-card p-8 rounded-xl h-full flex flex-col fade-in-up" style="transition-delay: 200ms;">
+                    <h3 class="font-bebas text-3xl tracking-wider text-gray-300 dark:text-[var(--text-secondary-light)]">Versão Gratuita</h3>
+                    <p class="mt-2 mb-6 min-h-[3rem] text-gray-500 dark:text-[var(--text-secondary-dark)]">Uma experiência robusta e completa para todos os jogadores.</p>
+                    <div class="flex-grow space-y-3">
+                        <ul class="feature-list">
+                          <li><svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span>Elencos atualizados para a temporada.</span></li>
+                          <li><svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span>Uniformes licenciados e atualizados.</span></li>
+                          <li><svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span>Acesso à comunidade para suporte e mods.</span></li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.com/invite/Xw6NBVVkPa" target="_blank" class="mt-8 block text-center w-full bg-gray-600/50 dark:bg-gray-700 font-bold py-3 rounded-lg hover:bg-gray-600/80 dark:hover:bg-gray-600 transition-colors">Baixar no Discord</a>
+                </div>
+
+                <div class="version-card vip-card p-8 rounded-xl flex flex-col relative fade-in-up" style="transition-delay: 300ms;">
+                    <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-black font-bold text-xs uppercase px-4 py-1.5 rounded-full shadow-lg">Upgrade</span>
+                    <div class="flex flex-wrap justify-between items-center gap-2">
+                        <h3 class="font-bebas text-4xl tracking-wider">💎 DMPES VIP</h3>
+                        <p class="font-bebas text-4xl">R$ 50</p>
+                    </div>
+                    <p class="text-yellow-300 dark:text-yellow-200 mt-2 mb-6 min-h-[3rem]">A versão definitiva para os verdadeiros entusiastas.</p>
+                    <div class="flex-grow bg-black/30 dark:bg-black/30 p-4 rounded-md">
+                        <ul class="feature-list">
+                          <li><svg class="vip-check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span><span class="font-bold">Tudo da versão Gratuita, MAIS:</span></span></li>
+                          <li class="pl-2 border-l-2 border-yellow-500/30 ml-2"><svg class="vip-check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span>Elencos atualizados com **mais frequência**.</span></li>
+                          <li class="pl-2 border-l-2 border-yellow-500/30 ml-2"><svg class="vip-check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span>Faces, menus e placares **exclusivos**.</span></li>
+                          <li class="pl-2 border-l-2 border-yellow-500/30 ml-2"><svg class="vip-check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><span>Uniformes e gráficos **4K**.</span></li>
+                        </ul>
+                    </div>
+                    <a href="#contato-vip" class="mt-8 block text-center w-full bg-yellow-400 text-black font-bebas text-2xl tracking-wider py-3 rounded-lg hover:bg-yellow-300 transition-transform hover:scale-105 shadow-lg shadow-yellow-400/20">Quero ser VIP!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato-vip" class="py-16 md:py-24">
+        <div class="container mx-auto px-4 text-center fade-in-up">
+            <h2 class="font-bebas text-4xl md:text-5xl tracking-wide glow-text">Como Adquirir o VIP ou Apoiar</h2>
+            <p class="mt-4 text-lg text-gray-400 dark:text-[var(--text-secondary-dark)] max-w-2xl mx-auto">Para se tornar VIP, entre em contato direto com o Daniel. Se quiser apenas apoiar o projeto com qualquer valor, use nossa chave PIX!</p>
+            <div class="flex flex-col md:flex-row gap-8 justify-center mt-8">
+                <a href="https://discord.com/invite/Xw6NBVVkPa" target="_blank" class="link-card p-6 rounded-lg flex-grow text-center"><h3 class="font-bold text-xl">Fale com o Daniel no Discord</h3><p>Envie DM para o nosso admin (DM PES)</p></a>
+                <a href="https://www.instagram.com/dmpes_" target="_blank" class="link-card p-6 rounded-lg flex-grow text-center"><h3 class="font-bold text-xl">Fale com o Daniel no Instagram</h3><p>Chame na DM do @dmpes_</p></a>
+            </div>
+            <div class="mt-12 max-w-md mx-auto bg-gray-900 dark:bg-[var(--card-dark)] border border-gray-700 dark:border-[var(--border-dark)] rounded-lg p-6">
+                <p class="text-sm text-gray-400 dark:text-[var(--text-secondary-dark)] uppercase tracking-wider">Apoie com PIX (Copia e Cola)</p>
+                <div class="flex items-center justify-between mt-2 bg-gray-800 dark:bg-black/30 p-3 rounded">
+                    <code id="pix-key" class="text-lg break-all">4981bb67-f7eb-45ad-8977-c429de23bdb4</code>
+                    <button id="copy-pix-button" class="ml-4 bg-yellow-500 text-black font-bold text-sm px-4 py-2 rounded hover:bg-yellow-400 transition-colors">Copiar</button>
+                </div>
+                <p id="copy-feedback" class="text-green-400 text-sm mt-2 h-4"></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 text-center">
+        <div class="container mx-auto px-4 fade-in-up">
+            <h2 class="font-bebas text-4xl md:text-5xl tracking-wide glow-text">DMPES 5.0</h2>
+            <p class="mt-2 text-lg text-gray-400 dark:text-[var(--text-secondary-dark)]">O futuro está sendo construído. Prepare-se.</p>
+            <div class="mt-8 max-w-3xl mx-auto aspect-video rounded-lg overflow-hidden shadow-2xl shadow-black">
+                <img src="em-breve-5.0.jpg" alt="Teaser da próxima versão" class="w-full h-full object-cover blur-md transition-all duration-500 hover:blur-sm">
+            </div>
+        </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-8 border-t border-gray-800 dark:border-[var(--border-dark)]">
+    <p class="text-sm text-gray-500 dark:text-gray-400">&copy; <span id="current-year"></span> DMPES. Todos os Direitos Reservados.</p>
+  </footer>
+
+  <script src="./onze-main.js"></script>
+
+</body>
+</html>
